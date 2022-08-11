@@ -2,14 +2,14 @@
 {
     public class Producto : IId
     {
-        private int _id;
+        private long _id;
         private string _descripciones;
         private double _costo;
         private double _precioVenta;
         private int _stock;
         private int _idUsuario;
 
-        public int Id { get { return _id; } set { _id = value; } }
+        public long Id { get { return _id; } set { _id = value; } }
         public string Descripciones { get { return _descripciones; } set { _descripciones = value; } }
         public double Costo { get { return _costo; } set { _costo = value; } }
         public double PrecioVenta { get { return _precioVenta; } set { _precioVenta = value; } }
@@ -26,7 +26,7 @@
             _idUsuario = 0;
         }
 
-        public Producto(int id, string descripciones, double costo, double precioVenta, int stock, int idUsuario)
+        public Producto(long id, string descripciones, double costo, double precioVenta, int stock, int idUsuario)
         {
             _id = id;
             _descripciones = descripciones;
