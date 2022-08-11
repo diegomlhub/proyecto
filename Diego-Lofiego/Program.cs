@@ -8,9 +8,9 @@
 
             Producto producto =  new Producto();
 
-            producto = productoHandler.TraerUnProducto(1);
+            producto = productoHandler.Get(1);
 
-            productoHandler.TraerProductos();
+            List<Producto> productos = productoHandler.Get();
         }
     }
 }

@@ -5,7 +5,14 @@ namespace Proyecto
 {
     public class ProductoHandler : DbHandler
     {
-        public Producto TraerUnProducto(int id)
+        private Producto DataReader(long id, string descripciones, double costo, double precioVenta, int stock, long idUsuario)
+        {
+            Producto producto = new Producto(id, descripciones, costo, precioVenta, stock, idUsuario);
+                                  
+            return producto;
+        }
+
+        public Producto Get(long id)
         {
             Producto producto = new Producto();
 
@@ -21,15 +28,9 @@ namespace Proyecto
 
                     using (SqlDataReader dataReader = sqlCommand.ExecuteReader())
                     {                        
-                        if (dataReader.HasRows & dataReader.Read())
-                        {                            
-                                producto.Id = Convert.ToInt32(dataReader["Id"]);
-                                producto.Descripciones = dataReader["Descripciones"].ToString();
-                                producto.Costo = Convert.ToInt32(dataReader["Costo"]);
-                                producto.PrecioVenta = Convert.ToInt32(dataReader["PrecioVenta"]);
-                                producto.Stock = Convert.ToInt32(dataReader["Stock"]);
-                                producto.IdUsuario = Convert.ToInt32(dataReader["IdUsuario"]);
-                                                                
+                        if (dataReader.HasRows & dataReader.Read()) //verifico que haya filas y que data reader haya leido
+                        {
+                            producto = DataReader(Convert.ToInt32(dataReader["Id"]), dataReader["Descripciones"].ToString(), Convert.ToInt32(dataReader["Costo"]), Convert.ToInt32(dataReader["PrecioVenta"]), Convert.ToInt32(dataReader["Stock"]), Convert.ToInt32(dataReader["IdUsuario"]));                                  
                         }
                     }
 
@@ -40,7 +41,7 @@ namespace Proyecto
             return producto;
         }
 
-        public List<Producto> TraerProductos()
+        public List<Producto> Get()
         {
             List<Producto> productos = new List<Producto>();
 
@@ -51,21 +52,12 @@ namespace Proyecto
                     sqlConnection.Open();
 
                     using (SqlDataReader dataReader = sqlCommand.ExecuteReader())
-                    {
-                        // Me aseguro que haya filas que leer
-                        if (dataReader.HasRows)
+                    {   
+                        if (dataReader.HasRows) //verifico que haya filas
                         {
                             while (dataReader.Read())
                             {
-                                Producto producto = new Producto();
-                                producto.Id = Convert.ToInt32(dataReader["Id"]);
-                                producto.Stock = Convert.ToInt32(dataReader["Stock"]);
-                                producto.IdUsuario = Convert.ToInt32(dataReader["IdUsuario"]);
-                                producto.Costo = Convert.ToInt32(dataReader["Costo"]);
-                                producto.PrecioVenta = Convert.ToInt32(dataReader["PrecioVenta"]);
-                                producto.Descripciones = dataReader["Descripciones"].ToString();
-
-                                productos.Add(producto);
+                                productos.Add(DataReader(Convert.ToInt32(dataReader["Id"]), dataReader["Descripciones"].ToString(), Convert.ToInt32(dataReader["Costo"]), Convert.ToInt32(dataReader["PrecioVenta"]), Convert.ToInt32(dataReader["Stock"]), Convert.ToInt32(dataReader["IdUsuario"])));
                             }
                         }
                     }
@@ -77,7 +69,7 @@ namespace Proyecto
             return productos;
         }
 
-        public void BorrarUnProducto(int idProducto)
+        public void Delete(long idProducto)
         {
             using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
@@ -98,7 +90,7 @@ namespace Proyecto
             }
         }
 
-        public void AgregarUnProducto(Producto producto)
+        public void Add(Producto producto)
         {
             using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
