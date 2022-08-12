@@ -69,6 +69,37 @@ namespace Proyecto
             return usuarios;
         }
 
+        public Usuario GetByCotraseña(string userName, string userContrseña)
+        {
+            Usuario usuario = new Usuario();
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand())
+                {
+                    sqlCommand.Connection = sqlConnection;
+                    sqlCommand.CommandText = "SELECT * FROM [SistemaGestion].[dbo].[Usuario] WHERE NombreUsuario = @nombreUsuario AND Contraseña = @contraseña";
+                    sqlCommand.Parameters.AddWithValue("@nombreUsuario", userName);
+                    sqlCommand.Parameters.AddWithValue("@contraseña", userContrseña);
+
+                    sqlConnection.Open();
+
+                    using (SqlDataReader dataReader = sqlCommand.ExecuteReader())
+                    {
+                        if (dataReader.HasRows & dataReader.Read()) //verifico que haya filas y que data reader haya leido
+                        {
+                            usuario = LeerUsuario(dataReader);
+                        }
+                    }
+
+                    sqlConnection.Close();
+                }
+            }
+
+            return usuario;
+        }
+
+
         public void Delete(long id)
         {
             using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
