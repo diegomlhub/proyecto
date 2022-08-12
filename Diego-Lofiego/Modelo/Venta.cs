@@ -1,11 +1,11 @@
 ﻿namespace Proyecto
 {
-    class Venta : IId
+    public class Venta : IId
     {
-        private int _id;
+        private long _id;
         private string _comentarios;
         
-        public int Id { get { return _id; } set { _id = value; } }
+        public long Id { get { return _id; } set { _id = value; } }
         public string Comentarios { get { return _comentarios; } set { _comentarios = value; } }
 
         public Venta()
@@ -14,7 +14,7 @@
             _comentarios = String.Empty;
         }
 
-        public Venta(int id, string comentarios)
+        public Venta(long id, string comentarios)
         {
             _id = id;
             _comentarios = comentarios;

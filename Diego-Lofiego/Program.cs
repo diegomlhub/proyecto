@@ -4,28 +4,49 @@
     {
         static void Main(string[] args)
         {
+            //ProductoHandler productoHandler = new ProductoHandler();
+
+            //Producto producto =  new Producto();
+
+            //producto = productoHandler.Get(1);
+
+            //List<Producto> productos = productoHandler.Get();
+
+            //productoHandler.Add(producto);
+
+            ////productoHandler.Delete(16);
+            
+            //--------------
+            
+            UsuarioHandler usuarioHandler = new UsuarioHandler();
+            
             Usuario usuario = new Usuario();
-            Producto producto = new Producto();
-            ProductoVendido productoVendido = new ProductoVendido(12,35,150,26);
-            Venta venta = new Venta();
 
-            Console.WriteLine("Usuario: ");
-            Console.WriteLine(usuario.Mostrar());
-            Console.WriteLine("\nProducto: ");
-            Console.WriteLine(producto.Mostrar());
-            Console.WriteLine("\nProducto Vendido: ");
-            Console.WriteLine(productoVendido.Mostrar());
+            //usuario = usuarioHandler.Get(1);
 
-            Console.WriteLine("-------");
-
-            //prueba para ver que los get y set funcionan correctamente
-            productoVendido.Id = 25;
-
-            Console.WriteLine("\nProducto Vendido: ");
-            Console.WriteLine(productoVendido.Mostrar());
+            //usuarioHandler.Add(usuario);
 
 
+            //------Loguin-------
 
+            Console.WriteLine("Ingrese la nombre de usuario:\n");
+
+            string systemUser = Console.ReadLine();
+
+            Console.WriteLine("\nIngrese la contraseña:\n");
+
+            string systemPassword = Console.ReadLine();
+
+            usuario = usuarioHandler.GetByCotraseña(systemUser, systemPassword);
+
+            if (systemUser.Equals(usuario.NombreUsuario) & systemPassword.Equals(usuario.Contraseña))
+            {
+                Console.WriteLine("\nSe a logueado correctamente.\n");
+            }
+            else
+            {
+                Console.WriteLine("\nUsuario y contraseña inválidos.\n"); 
+            }
         }
     }
 }
