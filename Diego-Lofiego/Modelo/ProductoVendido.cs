@@ -1,6 +1,6 @@
 ﻿namespace Proyecto
 {
-    class ProductoVendido : IId
+    public class ProductoVendido : IId
     {
         private long _id;
         private long _idProducto;

@@ -1,6 +1,6 @@
 ﻿namespace Proyecto
 {
-    class Venta : IId
+    public class Venta : IId
     {
         private long _id;
         private string _comentarios;
