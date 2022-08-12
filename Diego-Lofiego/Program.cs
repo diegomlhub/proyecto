@@ -11,6 +11,12 @@
             producto = productoHandler.Get(1);
 
             List<Producto> productos = productoHandler.Get();
+
+           // productoHandler.Add(producto);
+
+            productoHandler.Delete(16);
+
+
         }
     }
 }

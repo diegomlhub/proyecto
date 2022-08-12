@@ -5,10 +5,10 @@ namespace Proyecto
 {
     public class ProductoHandler : DbHandler
     {
-        private Producto DataReader(long id, string descripciones, double costo, double precioVenta, int stock, long idUsuario)
+        private Producto LeerProducto(SqlDataReader dataReader)
         {
-            Producto producto = new Producto(id, descripciones, costo, precioVenta, stock, idUsuario);
-                                  
+            Producto producto = new Producto(Convert.ToInt32(dataReader["Id"]), dataReader["Descripciones"].ToString(), Convert.ToInt32(dataReader["Costo"]), Convert.ToInt32(dataReader["PrecioVenta"]), Convert.ToInt32(dataReader["Stock"]), Convert.ToInt32(dataReader["IdUsuario"]));
+                        
             return producto;
         }
 
@@ -30,7 +30,7 @@ namespace Proyecto
                     {                        
                         if (dataReader.HasRows & dataReader.Read()) //verifico que haya filas y que data reader haya leido
                         {
-                            producto = DataReader(Convert.ToInt32(dataReader["Id"]), dataReader["Descripciones"].ToString(), Convert.ToInt32(dataReader["Costo"]), Convert.ToInt32(dataReader["PrecioVenta"]), Convert.ToInt32(dataReader["Stock"]), Convert.ToInt32(dataReader["IdUsuario"]));                                  
+                            producto = LeerProducto(dataReader);                                  
                         }
                     }
 
@@ -57,7 +57,7 @@ namespace Proyecto
                         {
                             while (dataReader.Read())
                             {
-                                productos.Add(DataReader(Convert.ToInt32(dataReader["Id"]), dataReader["Descripciones"].ToString(), Convert.ToInt32(dataReader["Costo"]), Convert.ToInt32(dataReader["PrecioVenta"]), Convert.ToInt32(dataReader["Stock"]), Convert.ToInt32(dataReader["IdUsuario"])));
+                                productos.Add(LeerProducto(dataReader));
                             }
                         }
                     }
@@ -69,21 +69,21 @@ namespace Proyecto
             return productos;
         }
 
-        public void Delete(long idProducto)
+        public void Delete(long id)
         {
             using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 string queryDelete = "DELETE FROM [SistemaGestion].[dbo].[Producto] WHERE Id = @idProducto";
 
                 SqlParameter sqlParameter = new SqlParameter("idProducto", SqlDbType.BigInt);
-                sqlParameter.Value = idProducto;
+                sqlParameter.Value = id;
 
                 sqlConnection.Open();
 
                 using (SqlCommand sqlCommand = new SqlCommand(queryDelete, sqlConnection))
                 {
                     sqlCommand.Parameters.Add(sqlParameter);
-                    sqlCommand.ExecuteScalar(); // aca se ejecuta el delete
+                    sqlCommand.ExecuteScalar(); // ejecuta el delete
                 }
 
                 sqlConnection.Close();
@@ -96,22 +96,25 @@ namespace Proyecto
             {
                 string queryInsert = "INSERT INTO [SistemaGestion].[dbo].[Producto] (Descripciones, Costo, PrecioVenta, Stock, IdUsuario) VALUES (@Descripciones, @Costo, @PrecioVenta, @Stock, @IdUsuario);";
 
-                SqlParameter descripcionesParameter = new SqlParameter("Descripciones", SqlDbType.VarChar) { Value = producto.Descripciones };
-                SqlParameter costoParameter = new SqlParameter("Costo", SqlDbType.Int) { Value = producto.Costo };
-                SqlParameter precioVentaParameter = new SqlParameter("PrecioVenta", SqlDbType.Int) { Value = producto.PrecioVenta };
-                SqlParameter stockParameter = new SqlParameter("Stock", SqlDbType.Int) { Value = producto.Stock };
-                SqlParameter idUsuarioParameter = new SqlParameter("IdUsuario", SqlDbType.Int) { Value = producto.IdUsuario };
-
+                List<SqlParameter> parameters = new List<SqlParameter>()
+                {
+                    new SqlParameter("Descripciones", SqlDbType.VarChar) { Value = producto.Descripciones },
+                    new SqlParameter("Costo", SqlDbType.Int) { Value = producto.Costo },
+                    new SqlParameter("PrecioVenta", SqlDbType.Int) { Value = producto.PrecioVenta },
+                    new SqlParameter("Stock", SqlDbType.Int) { Value = producto.Stock },
+                    new SqlParameter("IdUsuario", SqlDbType.Int) { Value = producto.IdUsuario }
+                };
+     
                 sqlConnection.Open();
 
                 using (SqlCommand sqlCommand = new SqlCommand(queryInsert, sqlConnection))
                 {
-                    sqlCommand.Parameters.Add(descripcionesParameter);
-                    sqlCommand.Parameters.Add(costoParameter);
-                    sqlCommand.Parameters.Add(precioVentaParameter);
-                    sqlCommand.Parameters.Add(stockParameter);
-                    sqlCommand.Parameters.Add(idUsuarioParameter);
-                    sqlCommand.ExecuteNonQuery(); // aca se ejecuta el insert
+                    foreach(SqlParameter a in parameters)
+                    {
+                        sqlCommand.Parameters.Add(a);
+                    }
+                    
+                    sqlCommand.ExecuteNonQuery(); // ejecuta el insert
                 }
 
                 sqlConnection.Close();
