@@ -73,9 +73,9 @@ namespace Proyecto
         {
             using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
-                string queryDelete = "DELETE FROM [SistemaGestion].[dbo].[ProductoVendido] WHERE Id = @idProductoVendido";
+                string queryDelete = "DELETE FROM [SistemaGestion].[dbo].[ProductoVendido] WHERE Id = @id";
 
-                SqlParameter sqlParameter = new SqlParameter("idProductoVendido", SqlDbType.BigInt);
+                SqlParameter sqlParameter = new SqlParameter("id", SqlDbType.BigInt);
                 sqlParameter.Value = id;
 
                 sqlConnection.Open();
@@ -98,7 +98,7 @@ namespace Proyecto
 
                 List<SqlParameter> parameters = new List<SqlParameter>()
                 {
-                    new SqlParameter("Stock", SqlDbType.VarChar) { Value = productoVendido.Stock },
+                    new SqlParameter("Stock", SqlDbType.Int) { Value = productoVendido.Stock },
                     new SqlParameter("IdProducto", SqlDbType.Int) { Value = productoVendido.IdProducto },
                     new SqlParameter("IdVenta", SqlDbType.Int) { Value = productoVendido.IdVenta },
                 };
@@ -107,9 +107,9 @@ namespace Proyecto
 
                 using (SqlCommand sqlCommand = new SqlCommand(queryInsert, sqlConnection))
                 {
-                    foreach (SqlParameter a in parameters)
+                    foreach (SqlParameter parameter in parameters)
                     {
-                        sqlCommand.Parameters.Add(a);
+                        sqlCommand.Parameters.Add(parameter);
                     }
 
                     sqlCommand.ExecuteNonQuery(); // ejecuta el insert

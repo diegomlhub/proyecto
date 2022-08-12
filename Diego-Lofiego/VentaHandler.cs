@@ -21,8 +21,8 @@ namespace Proyecto
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
                     sqlCommand.Connection = sqlConnection;
-                    sqlCommand.CommandText = "SELECT * FROM [SistemaGestion].[dbo].[Venta] WHERE Id = @idVenta";
-                    sqlCommand.Parameters.AddWithValue("@idVenta", id);
+                    sqlCommand.CommandText = "SELECT * FROM [SistemaGestion].[dbo].[Venta] WHERE Id = @id";
+                    sqlCommand.Parameters.AddWithValue("@id", id);
 
                     sqlConnection.Open();
 
@@ -73,9 +73,9 @@ namespace Proyecto
         {
             using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
-                string queryDelete = "DELETE FROM [SistemaGestion].[dbo].[Venta] WHERE Id = @idVenta";
+                string queryDelete = "DELETE FROM [SistemaGestion].[dbo].[Venta] WHERE Id = @id";
 
-                SqlParameter sqlParameter = new SqlParameter("idVenta", SqlDbType.BigInt);
+                SqlParameter sqlParameter = new SqlParameter("id", SqlDbType.BigInt);
                 sqlParameter.Value = id;
 
                 sqlConnection.Open();

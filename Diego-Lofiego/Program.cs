@@ -12,10 +12,19 @@
 
             List<Producto> productos = productoHandler.Get();
 
-           // productoHandler.Add(producto);
+            productoHandler.Add(producto);
 
-            productoHandler.Delete(16);
+            //productoHandler.Delete(16);
+            
+            //--------------
+            
+            UsuarioHandler usuarioHandler = new UsuarioHandler();
+            
+            Usuario usuario = new Usuario();
 
+            usuario = usuarioHandler.Get(1);
+
+            usuarioHandler.Add(usuario);    
 
         }
     }
